@@ -5,40 +5,49 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleResourceNotFound(ResourceNotFoundException ex) {
-        Map<String, String> map = new HashMap<>();
-        map.put("error", "Not found");
-        map.put("message", ex.getMessage());
+    public ResponseEntity<ApiError> handleResourceNotFound(ResourceNotFoundException ex) {
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Not Found",
+                List.of(ex.getMessage())
+        );
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(map);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
     }
 
     @ExceptionHandler(DuplicateResourceException.class)
-    public ResponseEntity<Map<String, String>> handleDuplicateResource(DuplicateResourceException ex) {
-        Map<String, String> map = new HashMap<>();
-        map.put("error", "Duplicate resource");
-        map.put("message", ex.getMessage());
+    public ResponseEntity<ApiError> handleDuplicateResource(DuplicateResourceException ex) {
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Duplicate Resource",
+                List.of(ex.getMessage())
+        );
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(map);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(apiError);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException ex) {
-        Map<String, String> map = new HashMap<>();
+    public ResponseEntity<ApiError> handleValidation(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors()
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .toList();
 
-        ex.getBindingResult().getFieldErrors().forEach(fieldError -> {
-            String fieldName = fieldError.getField();
-            String errorMessage = fieldError.getDefaultMessage();
-            map.put(fieldName, errorMessage);
-        });
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Validation Failed",
+                errors
+        );
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(map);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
 }
