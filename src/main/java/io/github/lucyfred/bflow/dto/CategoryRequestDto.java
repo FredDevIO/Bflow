@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record CategoryRequestDto(
-        @Size(min = 6, max = 50, message = "Message must contain at least between 6 and 50 characters")
+        @Size(min = 6, max = 50, message = "Name must contain at least between 6 and 50 characters")
         @NotBlank(message = "Name cannot be empty")
         String name,
 
