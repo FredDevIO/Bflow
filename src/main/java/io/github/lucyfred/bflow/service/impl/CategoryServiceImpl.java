@@ -12,7 +12,6 @@ import io.github.lucyfred.bflow.repository.CategoryRepository;
 import io.github.lucyfred.bflow.repository.UserRepository;
 import io.github.lucyfred.bflow.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
