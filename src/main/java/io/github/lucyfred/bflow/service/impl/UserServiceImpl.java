@@ -6,7 +6,6 @@ import io.github.lucyfred.bflow.entity.User;
 import io.github.lucyfred.bflow.exception.DuplicateResourceException;
 import io.github.lucyfred.bflow.exception.ResourceNotFoundException;
 import io.github.lucyfred.bflow.mapper.UserMapper;
-import io.github.lucyfred.bflow.repository.CategoryRepository;
 import io.github.lucyfred.bflow.repository.UserRepository;
 import io.github.lucyfred.bflow.service.CategoryService;
 import io.github.lucyfred.bflow.service.UserService;

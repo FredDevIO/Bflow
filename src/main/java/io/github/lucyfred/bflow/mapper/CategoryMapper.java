@@ -4,8 +4,6 @@ import io.github.lucyfred.bflow.dto.CategoryRequestDto;
 import io.github.lucyfred.bflow.dto.CategoryResponseDto;
 import io.github.lucyfred.bflow.entity.Category;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
 import java.util.List;
 
 @Mapper(componentModel = "spring")
