@@ -2,9 +2,12 @@ package io.github.lucyfred.bflow.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.security.cert.CertificateRevokedException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -49,5 +52,17 @@ public class GlobalExceptionHandler {
         );
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiError> handleBadCredentials(BadCredentialsException ex) {
+        ApiError apiError = new ApiError(
+                LocalDateTime.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "Invalid Credentials",
+                List.of(ex.getMessage())
+        );
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
     }
 }
