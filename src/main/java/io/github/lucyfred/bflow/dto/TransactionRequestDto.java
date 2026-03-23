@@ -17,7 +17,6 @@ public record TransactionRequestDto(
         String description,
 
         @NotNull
-        @JsonFormat(pattern = "MM/dd/yyyy")
         LocalDate transactionDate,
 
         @NotNull
