@@ -5,6 +5,7 @@ import io.github.lucyfred.bflow.dto.TransactionResponseDto;
 import io.github.lucyfred.bflow.entity.Category;
 import io.github.lucyfred.bflow.entity.Transaction;
 import io.github.lucyfred.bflow.entity.User;
+import io.github.lucyfred.bflow.enums.CategoryTypes;
 import io.github.lucyfred.bflow.exception.ResourceNotFoundException;
 import io.github.lucyfred.bflow.mapper.TransactionMapper;
 import io.github.lucyfred.bflow.repository.CategoryRepository;
@@ -12,8 +13,10 @@ import io.github.lucyfred.bflow.repository.TransanctionRepository;
 import io.github.lucyfred.bflow.repository.UserRepository;
 import io.github.lucyfred.bflow.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-
+import org.springframework.data.domain.Pageable;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -33,10 +36,38 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    public Page<TransactionResponseDto> getAllTransactions(Long userId, Pageable pageable) {
+        Page<Transaction> transactions = transanctionRepository.getAllByUserIdOrderByTransactionDateDesc(userId, pageable);
+
+        return transactions.map(transactionMapper::toTransactionResponseDto);
+    }
+
+    @Override
+    public List<TransactionResponseDto> getAllTransactionsType(Long userId, CategoryTypes categoryType) {
+        List<Transaction> transactions = transanctionRepository.getAllByUserIdAndCategoryType(userId, categoryType);
+
+        return transactionMapper.toListTransactionResponseDto(transactions);
+    }
+
+    @Override
     public List<TransactionResponseDto> getAllTransactionsFromCategory(Long categoryId, Long userId) {
         List<Transaction> transactions = transanctionRepository.getAllByUserIdAndCategoryId(userId, categoryId);
 
         return transactionMapper.toListTransactionResponseDto(transactions);
+    }
+
+    @Override
+    public List<TransactionResponseDto> getTop4Transactions(Long userId) {
+        List<Transaction> transactions = transanctionRepository.findTop5ByUserIdOrderByTransactionDateAsc(userId);
+
+        return transactionMapper.toListTransactionResponseDto(transactions);
+    }
+
+    @Override
+    public List<TransactionResponseDto> getAllTransactionsBetweenDates(Long userId, LocalDate start, LocalDate end) {
+        List<Transaction> transactions = transanctionRepository.findByUserIdAndTransactionDateBetweenOrderByTransactionDateDesc(userId, start, end);
+
+        return  transactionMapper.toListTransactionResponseDto(transactions);
     }
 
     @Override
