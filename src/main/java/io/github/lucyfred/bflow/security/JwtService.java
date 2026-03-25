@@ -1,5 +1,6 @@
 package io.github.lucyfred.bflow.security;
 
+import io.github.lucyfred.bflow.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 @Service
@@ -19,14 +21,19 @@ public class JwtService {
     @Value("${JWT_SECRET}")
     private String secretKey;
 
-    public String extractUsernameFromToken(String token) {
+    public String extractIdFromToken(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
     public String generateToken(UserDetails userDetails) {
+        User currentUser = (User) userDetails;
+        Map<String, Object> extraClaims = new HashMap<>();
+
+        extraClaims.put("role", currentUser.getRole().name());
+
         return Jwts.builder()
-                .setClaims(new HashMap<>())
-                .setSubject(userDetails.getUsername())
+                .setClaims(extraClaims)
+                .setSubject(currentUser.getId().toString())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
@@ -34,8 +41,10 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        final String id = extractIdFromToken(token);
+        User currentUser = (User) userDetails;
+
+        return (id.equals(currentUser.getId().toString())) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

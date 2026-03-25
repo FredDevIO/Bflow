@@ -29,11 +29,11 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse login(AuthRequest authRequest) {
-        authenticationManager.authenticate(
+        var auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.username(), authRequest.password())
         );
 
-        UserDetails user = userDetailsService.loadUserByUsername(authRequest.username());
+        User user = (User) auth.getPrincipal();
 
         String jwtToken = jwtService.generateToken(user);
 
