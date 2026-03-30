@@ -1,0 +1,48 @@
+services:
+  ## DATABASE ##
+  db:
+    image: mysql:8.0
+    container_name: bflow-db
+    restart: always
+    environment:
+      - MYSQL_DATABASE=bflow_db
+      - MYSQL_USER=bflow_admin
+      - MYSQL_PASSWORD=bflow_pass
+      - MYSQL_ROOT_PASSWORD=root_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  ## BACKEND ##
+  bflow-api:
+    build: ./backend
+    container_name: bflow-backend
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_IP=db
+      - DB_DB=bflow_db
+      - DB_USER=bflow_admin
+      - DB_PASSWORD=bflow_pass
+      - CORS_ORIGINS=*
+      - SPRING_PROFILES_ACTIVE=prod
+      - JWT_SECRET=hxeestt6PY68DiTEXuNQfS6lSsATeknNrEw1YYdFOrm
+      - ADMIN_EMAIL=user@bflow.com
+      - ADMIN_PASSWORD=bflow
+      - ADMIN_NAME=admin
+    restart: on-failure
+
+  ## FRONTEND ##
+  bflow-web:
+    build: ./frontend
+    container_name: bflow-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - bflow-api
+
+volumes:
+  mysql_data:
