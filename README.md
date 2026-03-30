@@ -1,6 +1,6 @@
 # 🌊 Bflow - Personal finance & transaction manager
 
-![Bflow](https://img.shields.io/badge/Status-Active-success) ![Docker](https://img.shields.io/badge/Docker-Ready-blue) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.3-green) ![React](https://img.shields.io/badge/React-18-blue)
+![Bflow](https://img.shields.io/badge/Status-Active-success) ![Docker](https://img.shields.io/badge/Docker-Ready-blue) ![Spring Boot](https://img.shields.io/badge/Spring_Boot-4.0.3-green) ![React](https://img.shields.io/badge/React-18-blue) ![CI Pipeline](https://github.com/FredDevIO/Bflow/actions/workflows/ci.yml/badge.svg)
 
 ---
 
