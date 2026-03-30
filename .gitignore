@@ -55,3 +55,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .eslintcache
+
+# macOS junk
+.DS_Store
+*/.DS_Store
+.AppleDouble
+.LSOverride
