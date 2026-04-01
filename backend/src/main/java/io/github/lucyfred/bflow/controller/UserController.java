@@ -37,7 +37,7 @@ public class UserController {
     @PostMapping("/me/password")
     @Operation(summary = "Change password", description = "Change my password")
     public ResponseEntity<UserResponseDto> changePassword(@Valid @RequestBody ChangePasswordRequest changePasswordRequest, @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(userService.changePassword(user.getId(), changePasswordRequest.oldPassword(), changePasswordRequest.newPassword()));
+        return ResponseEntity.ok(userService.changePassword(user.getId(), changePasswordRequest));
     }
 
     @GetMapping("/all")
