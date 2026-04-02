@@ -2,7 +2,7 @@ package io.github.lucyfred.bflow.controller;
 
 import io.github.lucyfred.bflow.dto.*;
 import io.github.lucyfred.bflow.entity.User;
-import io.github.lucyfred.bflow.service.impl.UserServiceImpl;
+import io.github.lucyfred.bflow.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @Tag(name = "Register", description = "User registration and retrieve user info")
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @GetMapping("/me")
     @Operation(summary = "Get my profile", description = "Retrieve my user data")
