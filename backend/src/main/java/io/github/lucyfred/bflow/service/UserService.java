@@ -1,6 +1,7 @@
 package io.github.lucyfred.bflow.service;
 
 import io.github.lucyfred.bflow.dto.AdminUserResponseDto;
+import io.github.lucyfred.bflow.dto.ChangePasswordRequest;
 import io.github.lucyfred.bflow.dto.UserResponseDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,6 @@ public interface UserService {
     Page<AdminUserResponseDto> getAllUsers(Long id, Pageable pageable);
     boolean deleteUser(Long userId);
     UserResponseDto updateProfile(Long userId, String newUsername, String newEmail, String currency, String language);
-    UserResponseDto changePassword(Long userId, String oldPassword, String newPassword);
+    UserResponseDto changePassword(Long userId, ChangePasswordRequest changePasswordRequest);
     boolean updateUserPassword(Long userId, String newPassword);
 }

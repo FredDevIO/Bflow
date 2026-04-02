@@ -1,6 +1,7 @@
 package io.github.lucyfred.bflow.service.impl;
 
 import io.github.lucyfred.bflow.dto.AdminUserResponseDto;
+import io.github.lucyfred.bflow.dto.ChangePasswordRequest;
 import io.github.lucyfred.bflow.dto.UserResponseDto;
 import io.github.lucyfred.bflow.entity.User;
 import io.github.lucyfred.bflow.enums.Currency;
@@ -83,15 +84,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDto changePassword(Long userId, String oldPassword, String newPassword) {
+    public UserResponseDto changePassword(Long userId, ChangePasswordRequest changePasswordRequest) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User " + userId + " not found"));
 
-        if(!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        if(!passwordEncoder.matches(changePasswordRequest.oldPassword(), user.getPassword())) {
             throw new RuntimeException("Current password does not match");
         }
 
-        user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(passwordEncoder.encode(changePasswordRequest.newPassword()));
 
         userRepository.save(user);
 

@@ -3,11 +3,13 @@ package io.github.lucyfred.bflow.controller;
 import io.github.lucyfred.bflow.dto.CategoryRequestDto;
 import io.github.lucyfred.bflow.dto.CategoryResponseDto;
 import io.github.lucyfred.bflow.entity.User;
-import io.github.lucyfred.bflow.service.impl.CategoryServiceImpl;
+import io.github.lucyfred.bflow.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Category", description = "Category operations endpoint")
 public class CategoryController {
-    private final CategoryServiceImpl categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping
     @Operation(summary = "Retrieve all categories", description = "Retrieve all user categories")
@@ -28,8 +30,8 @@ public class CategoryController {
 
     @PostMapping
     @Operation(summary = "Create a category", description = "Create a user category")
-    public CategoryResponseDto createCategory(@Valid @RequestBody CategoryRequestDto categoryRequestDto, @AuthenticationPrincipal User user) {
-        return categoryService.createCategory(categoryRequestDto, user.getId());
+    public ResponseEntity<CategoryResponseDto> createCategory(@Valid @RequestBody CategoryRequestDto categoryRequestDto, @AuthenticationPrincipal User user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.createCategory(categoryRequestDto, user.getId()));
     }
 
     @PutMapping("/{category_id}")

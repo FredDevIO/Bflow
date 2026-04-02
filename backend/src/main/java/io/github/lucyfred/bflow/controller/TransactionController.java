@@ -11,6 +11,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
@@ -62,8 +64,8 @@ public class TransactionController {
 
     @PostMapping
     @Operation(summary = "Create a transaction", description = "Create a transaction for the user")
-    public TransactionResponseDto createTransaction(@Valid @RequestBody TransactionRequestDto transactionRequestDto, @AuthenticationPrincipal User user) {
-        return transactionService.createTransaction(transactionRequestDto, user.getId());
+    public ResponseEntity<TransactionResponseDto> createTransaction(@Valid @RequestBody TransactionRequestDto transactionRequestDto, @AuthenticationPrincipal User user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.createTransaction(transactionRequestDto, user.getId()));
     }
 
     @PutMapping("/{transaction_id}")
