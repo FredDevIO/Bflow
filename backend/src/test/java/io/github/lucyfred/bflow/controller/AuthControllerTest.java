@@ -6,6 +6,7 @@ import io.github.lucyfred.bflow.dto.AuthResponse;
 import io.github.lucyfred.bflow.dto.UserRequestDto;
 import io.github.lucyfred.bflow.dto.UserResponseDto;
 import io.github.lucyfred.bflow.exception.DuplicateResourceException;
+import io.github.lucyfred.bflow.repository.UserRepository;
 import io.github.lucyfred.bflow.security.JwtService;
 import io.github.lucyfred.bflow.service.AuthService;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,9 @@ public class AuthControllerTest {
 
     @MockitoBean
     private AuthService authService;
+
+    @MockitoBean
+    private UserRepository userRepository;
 
     @MockitoBean
     private JwtService jwtService;
