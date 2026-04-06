@@ -9,7 +9,7 @@ on:
 jobs:
   # TASK: Check backend
   backend-build:
-    name: Build Spring Boot
+    name: Build & Test Spring Boot
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -26,7 +26,10 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Compile with Maven (Without tests for now)
+      - name: Run Backend Tests
+        run: mvn test
+
+      - name: Package Application
         run: mvn clean package -DskipTests
 
   # TASK: Check frontend (React + Vite)

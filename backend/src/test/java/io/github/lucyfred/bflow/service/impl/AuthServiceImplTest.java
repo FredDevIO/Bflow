@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import static org.junit.jupiter.api.Assertions.*;
@@ -87,7 +88,13 @@ class AuthServiceImplTest {
     @DisplayName("Scenario: Successfully login with valid credentials")
     void successfulLogin(){
         AuthRequest request = new AuthRequest("Jhon", "123456");
+        User mockUser = new User();
+        mockUser.setUsername("Jhon");
 
+        Authentication mockAuth = mock(org.springframework.security.core.Authentication.class);
+
+        when(mockAuth.getPrincipal()).thenReturn(mockUser);
+        when(authenticationManager.authenticate(any())).thenReturn(mockAuth);
         when(jwtService.generateToken(any())).thenReturn("emulated-token");
 
         var response = authService.login(request);
